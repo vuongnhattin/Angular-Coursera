@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+$primary: #0066cc;
+$border-radius: 2pt;
+$modal-content-border-radius: 0pt;
+$success: #1e4f18;
+$danger: #a30000;
+$link-decoration: none;
+$input-group-addon-bg: white;
+
+/* Importing Bootstrap SCSS file. */
+@import 'bootstrap/scss/bootstrap';
