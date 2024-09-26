@@ -14,7 +14,7 @@ import { BreadcrumbComponent } from "./breadcrumb.component";
   template: `
     <app-breadcrumb [data]="[
       { name: 'Trang chủ', url: '/' },
-      { name: 'Khoá học', url: '../../home/module/1' },
+      { name: 'Khoá học', url: '../../home/introduction' },
       { name: 'Tài liệu', url: '' }
     ]">
     </app-breadcrumb>

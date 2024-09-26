@@ -140,6 +140,7 @@ export class CourseHomeComponent implements OnInit {
   };
 
   deleteModuleModal: Modal = {
+    id: 'delete-module',
     header: 'Xoá học phần',
     body: 'Bạn có chắc chắn muốn xoá học phần: ',
     others: {},
@@ -172,19 +173,34 @@ export class CourseHomeComponent implements OnInit {
         });
     });
 
-    this.deleteModalSharedService.data$.subscribe(() => {
-      if (!this.currentModule) {
-        this.toastService.show('Bạn chưa chọn học phần');
-        return;
-      }
+    this.deleteModalSharedService.data$.subscribe((data) => {
+      if (data === 'delete-module') {
+        if (!this.currentModule) {
+          this.toastService.show('Bạn chưa chọn học phần');
+          return;
+        }
 
-      this.http
-        .delete(`http://localhost:8080/api/modules/${this.currentModule.id}`)
-        .subscribe(() => {
-          this.toastService.show('Xoá học phần thành công');
-          
-          this.router.navigate(['course', this.courseId, 'home', 'module', this.modules[0].id]);
-        });
+        this.http
+          .delete(`http://localhost:8080/api/modules/${this.currentModule.id}`)
+          .subscribe(
+            () => {
+              this.toastService.show('Xoá học phần thành công');
+
+              this.router.navigate([
+                'course',
+                this.courseId,
+                'home',
+                'module',
+                this.modules[0].id,
+              ]);
+
+              window.location.reload();
+            },
+            (error) => {
+              this.toastService.show('Xoá học phần không thành công', 'error');
+            }
+          );
+      }
     });
   }
 

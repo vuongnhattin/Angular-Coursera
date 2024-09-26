@@ -9,7 +9,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   standalone: true,
   imports: [BaseModalComponent],
   template: `
-    <app-base-modal (agree)="onAgree()" [data]="data">
+    <app-base-modal (agree)="onAgree()" [data]="data" [buttonType]="'btn-danger'">
       {{ data.body }}
     </app-base-modal>
   `,
@@ -21,7 +21,7 @@ export class DeleteModalComponent {
   activeModal = inject(NgbActiveModal);
 
   onAgree() {
-    this.service.triggerDelete();
+    this.service.triggerDelete(this.data.id);
     this.activeModal.close();
   }
 }

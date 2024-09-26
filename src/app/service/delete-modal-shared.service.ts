@@ -6,12 +6,17 @@ import { BehaviorSubject, Subject } from 'rxjs';
 })
 export class DeleteModalSharedService {
 
-  private dataSource = new Subject<void>();
+  private dataSource = new Subject<string>();
   data$ = this.dataSource.asObservable();
 
   constructor() {}
 
-  triggerDelete() {
-    this.dataSource.next();
+  triggerDelete(value: string | undefined) {
+    if (!value) {
+      this.dataSource.next('');
+    }
+    else {
+      this.dataSource.next(value);
+    }
   }
 }

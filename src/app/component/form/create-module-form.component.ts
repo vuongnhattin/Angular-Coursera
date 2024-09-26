@@ -36,6 +36,7 @@ export class CreateModuleFormComponent extends BaseFormComponent implements OnIn
       (response) => {
         form.form.reset();
         this.toastService.show('Tạo học phần thành công');
+        window.location.reload();
       },
       (error) => {
         for (let obj in error.error) {

@@ -29,13 +29,14 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
       >
         Đóng
       </button>
-      <button class="btn btn-primary" (click)="onAgree()">Xác nhận</button>
+      <button class="btn btn-primary" [class]="buttonType" (click)="onAgree()">Xác nhận</button>
     </div>
   `,
   styles: ``,
 })
 export class BaseModalComponent {
   @Input() data: Modal;
+  @Input() buttonType: string;
   @Output() agree = new EventEmitter();
 
   activeModal = inject(NgbActiveModal);

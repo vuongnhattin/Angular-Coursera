@@ -58,6 +58,7 @@ export class UpdateModuleFormComponent
         (response) => {
           form.form.reset();
           // window.location.reload();
+          window.location.reload();
           this.toastService.show('Sửa học phần thành công');
         },
         (error) => {
