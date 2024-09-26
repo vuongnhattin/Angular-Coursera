@@ -13,9 +13,9 @@ import { CourseCardComponent } from './course-card.component';
 import { AuthService } from '../service/auth.service';
 import { OAuthEvent, OAuthService } from 'angular-oauth2-oidc';
 import { NgbModal, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { ModalComponent } from './modal.component';
+import { FormModalComponent } from './modal/form-modal.component';
 import { Modal } from '../model/modal.model';
-import { CreateCourseForm } from './create-course-form.component';
+import { CreateCourseForm } from './form/create-course-form.component';
 import { ToastService } from '../service/toast.service';
 import { ToastContainerComponent } from './toast-container.component';
 import { NgFor } from '@angular/common';
@@ -67,8 +67,6 @@ import { FormsModule, NgForm } from '@angular/forms';
           </button>
         </div>
       </div>
-
-      
 
       <div class="row gx-5">
         @for (course of courses; track course.id) {
@@ -154,7 +152,7 @@ export class ListCoursePageComponent implements OnInit {
   };
 
   open() {
-    const modalRef = this.modalService.open(ModalComponent);
+    const modalRef = this.modalService.open(FormModalComponent);
     modalRef.componentInstance.data = this.modal;
   }
 

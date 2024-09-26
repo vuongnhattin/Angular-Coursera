@@ -9,7 +9,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
   standalone: true,
   imports: [NgbDropdownModule, RouterLink],
   template: `
-    <nav class="navbar bg-body-tertiary py-3 mb-4">
+    <nav class="navbar bg-body-tertiary py-3 mb-4 sticky-top">
       <div class="container">
         <a class="navbar-brand" routerLink="">
           <img

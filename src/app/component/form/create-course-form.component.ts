@@ -8,25 +8,26 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { SubmitFormService } from '../service/submit-form.service';
+import { SubmitFormService } from '../../service/submit-form.service';
 import { Subscription } from 'rxjs';
-import { ToastService } from '../service/toast.service';
+import { ToastService } from '../../service/toast.service';
 import { HttpClient } from '@angular/common/http';
-import { Course } from '../model/course.model';
+import { Course } from '../../model/course.model';
+import { BaseFormComponent } from './base-form.component';
 
 @Component({
   selector: 'app-create-course-form',
   standalone: true,
   imports: [FormsModule],
   template: `
-    <form  #createCourseForm="ngForm" (ngSubmit)="onSubmit(createCourseForm)">
+    <form  #form="ngForm" (ngSubmit)="onSubmit(form)" autocomplete="off">
       <div class="mb-3">
         <label for="name" class="form-label">Tên khoá học</label>
         <input
           class="form-control"
           id="name"
           name="name"
-          [(ngModel)]="form.name"
+          [(ngModel)]="model.name"
         />
       </div>
       <div class="mb-3">
@@ -35,41 +36,23 @@ import { Course } from '../model/course.model';
           class="form-control"
           id="description"
           name="description"
-          [(ngModel)]="form.description"
+          [(ngModel)]="model.description"
         />
       </div>
-      <!-- <button class="btn btn-primary">Submit</button> -->
     </form>
   `,
   styles: ``,
 })
-export class CreateCourseForm implements OnInit, OnDestroy {
-  submitFormService = inject(SubmitFormService);
-  private subscription!: Subscription;
-  toastService = inject(ToastService);
-  http = inject(HttpClient);
-
-  form = {
+export class CreateCourseForm extends BaseFormComponent {
+  override model = {
     name: '',
     description: '',
   };
 
-  @ViewChild('createCourseForm') createCourseForm!: NgForm;
-
-  ngOnInit(): void {
-    this.subscription = this.submitFormService.submitForm$.subscribe(() => {
-      this.onSubmit(this.createCourseForm);
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-
-  onSubmit(createCourseForm: NgForm) {
-    this.http.post<Course>('http://localhost:8080/api/courses', this.form).subscribe(
+  override onSubmit(form: NgForm) {
+    this.http.post<Course>('http://localhost:8080/api/courses', this.model).subscribe(
       (response) => {
-        createCourseForm.form.reset();
+        form.form.reset();
         this.toastService.show('Tạo khoá học thành công');
       },
       (error) => {

@@ -27,6 +27,6 @@ export class CourseCardComponent {
   router = inject(Router);
 
   goToCourse() {
-    this.router.navigate(['/courses', this.course().id]);
+    this.router.navigate(['/course', this.course().id]);
   }
 }

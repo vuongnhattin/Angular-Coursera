@@ -6,6 +6,16 @@ $success: #1e4f18;
 $danger: #a30000;
 $link-decoration: none;
 $input-group-addon-bg: white;
-
+$offcanvas-horizontal-width: 300px;
+$card-cap-bg: white;
+// $card-cap-color: white;
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+
+// a {
+//     color: $primary;
+// }
+
+.dropdown-toggle::after {
+    content: none;
+}

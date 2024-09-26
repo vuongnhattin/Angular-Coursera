@@ -9,7 +9,6 @@ import { OAuthService } from 'angular-oauth2-oidc';
   template: `
     <div class="container">
       <pre>
-
         {{ userInfo | json }}
       </pre>
     </div>
