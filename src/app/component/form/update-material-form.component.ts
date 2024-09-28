@@ -37,7 +37,7 @@ import { NgFor } from '@angular/common';
       </div> -->
 
       <div class="mb-3">
-        <label for="fileType" class="form-label">Tài liệu</label>
+        <label for="fileType" class="form-label">Loại tài liệu</label>
         <select
           class="form-select"
           id="fileType"
