@@ -1,6 +1,7 @@
-import { Component, inject, input, Input } from '@angular/core';
+import { Component, Inject, inject, input, Input } from '@angular/core';
 import { Course } from '../model/course.model';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-course-card',
@@ -15,7 +16,12 @@ import { Router } from '@angular/router';
           {{ course().description }}
         </p>
         <div class="col-12 text-center">
-          <a class="btn btn-primary" (click)="goToCourse()">Truy cập</a>
+          @if (course().member === false) {
+            <a class="btn btn-outline-primary" (click)="joinCourse(course().id)">Đăng kí</a>
+          }
+          @else {
+            <a class="btn btn-primary" (click)="goToCourse()">Truy cập</a>
+          }
         </div>
       </div>
     </div>
@@ -25,8 +31,17 @@ import { Router } from '@angular/router';
 export class CourseCardComponent {
   course = input.required<Course>();
   router = inject(Router);
+  http = inject(HttpClient);
 
   goToCourse() {
     this.router.navigate(['/course', this.course().id]);
+  }
+
+  joinCourse(id: number) {
+    this.http.post<any>('http://localhost:8080/api/me/courses', {
+      courseId: id
+    }).subscribe(response => {
+      window.location.reload();
+    })
   }
 }

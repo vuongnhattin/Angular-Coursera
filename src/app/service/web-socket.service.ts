@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
 import { catchError, retryWhen, delay, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { MessageSend } from '../model/message-send.model';
+import { MessageReceive } from '../model/message-receive.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +12,9 @@ import { AuthService } from './auth.service';
 export class WebSocketService {
   private socket;
   private stompClient;
+
+  private messageSource = new Subject<MessageReceive>();
+  message$ = this.messageSource.asObservable();
 
   constructor(private auth: AuthService) {
     this.socket = new SockJS('http://localhost:8080/ws');
@@ -21,12 +26,11 @@ export class WebSocketService {
   
     console.log('STOMP client initialized:', this.stompClient);
 
-    this.stompClient.connect({ Authorization: 'Bearer ' + token }, (frame: any) => {
-      console.log('Connected:', frame);  // Log the full frame object
-  
+    this.stompClient.connect({ Authorization: 'Bearer ' + token }, (frame: any) => {  
       // Subscribe to a topic
-      this.stompClient.subscribe('/user/queue/messages', (message: any) => {
-        console.log('Received message:', message);
+      this.stompClient.subscribe('/user/queue/messages', (response: any) => {
+        console.log('Received message:', JSON.parse(response.body));
+        this.messageSource.next(JSON.parse(response.body));
         // this.onMessageReceived(message);
       });
     }, (error: any) => {
@@ -35,20 +39,9 @@ export class WebSocketService {
 
     // this.stompClient.connect({ Authorization: 'Bearer ' + token }, this.onConnected, this.onError);
    }
-  
-   onConnected(frame: any) {
-    console.log('Connected: ', frame);
-    console.log('StompClient:', this.stompClient);
-    this.stompClient.subscribe('/topic/public', (message: any) => {
-      console.log('Message: ' + message);
-    });
-  }
 
-  onError(error: any) {
-    console.log('Error: ' + error);
-  }
-
-  sendMessage(message: string) {
-    this.stompClient.send('/app/send', {}, message);
+  sendMessage(message: MessageSend) {
+    this.stompClient.send('/app/send', {}, JSON.stringify(message));
+    console.log(message);
   }
 }

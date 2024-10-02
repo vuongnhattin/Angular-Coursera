@@ -128,7 +128,7 @@ export class ListCoursePageComponent implements OnInit {
   getCourses() {
     this.http
       .get<Pagination<Course>>(
-        `http://localhost:8080/api/courses?page=${this.page - 1}&size=${
+        `http://localhost:8080/api/me/courses?page=${this.page - 1}&size=${
           this.pageSize
         }&sortBy=${this.sortBy}&order=${this.order}&search=${this.search}`
       )
