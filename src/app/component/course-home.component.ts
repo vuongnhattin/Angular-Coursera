@@ -27,6 +27,7 @@ import { ModuleSharedService } from '../service/module-shared.service';
 import { DeleteModalSharedService } from '../service/delete-modal-shared.service';
 import { DeleteModalComponent } from './modal/delete-modal.component';
 import { ToastService } from '../service/toast.service';
+import { Course } from '../model/course.model';
 // import { UpdateModuleFormComponent } from './form/update-module-form.component';
 
 @Component({
@@ -44,7 +45,7 @@ import { ToastService } from '../service/toast.service';
   ],
   template: `
     <app-sidebar>
-      <div title>Mục lục khoá học</div>
+      <div title class="text-danger">{{course.name}}</div>
 
       <ul class="list-group list-group-flush">
         <a
@@ -122,6 +123,7 @@ export class CourseHomeComponent implements OnInit {
   toastService = inject(ToastService);
 
   courseId: number;
+  course: Course;
 
   currentModule: Module | undefined;
 
@@ -150,6 +152,10 @@ export class CourseHomeComponent implements OnInit {
     this.courseId = Number(
       this.route.parent?.snapshot.paramMap.get('courseId')
     );
+
+    this.http.get<Course>(`http://localhost:8080/api/courses/${this.courseId}`).subscribe((response) => {
+      this.course = response;
+    });
 
     this.addModuleModal.others = { courseId: this.courseId };
 
