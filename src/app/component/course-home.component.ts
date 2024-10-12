@@ -28,6 +28,7 @@ import { DeleteModalSharedService } from '../service/delete-modal-shared.service
 import { DeleteModalComponent } from './modal/delete-modal.component';
 import { ToastService } from '../service/toast.service';
 import { Course } from '../model/course.model';
+import { Member } from '../model/member.model';
 // import { UpdateModuleFormComponent } from './form/update-module-form.component';
 
 @Component({
@@ -45,42 +46,55 @@ import { Course } from '../model/course.model';
   ],
   template: `
     <app-sidebar>
-      <div title class="text-danger">{{course.name}}</div>
+      <!-- <div class="col text-center"> -->
+      @if (course) {
+      <div title>
+        {{ course.name }}
+      </div>
+      }
+      <!-- </div> -->
 
       <ul class="list-group list-group-flush">
         <a
           class="list-group-item list-group-item-action"
           [routerLink]="['introduction']"
           routerLinkActive="active"
-          ><div class="h5">Giới thiệu khoá học</div></a
+          ><div class="h5">
+            <i class="fa-solid fa-house"></i>&nbsp; Giới thiệu khoá học
+          </div></a
         >
       </ul>
 
       <ul class="list-group list-group-flush">
         <div class="list-group-item list-group-item-action" (click)="(1)">
           <div class="row align-items-center p-0">
-            <div class="h5 col-7">Các học phần</div>
-            <div class="col text-end">
-              <button
-                class="btn btn-outline-dark p-1"
-                (click)="openAddModule()"
-              >
-                <i class="fa-solid fa-circle-plus"></i>
-              </button>
-              <div
-                class="btn btn btn-outline-dark p-1"
-                (click)="openUpdateModule()"
-              >
-                <i class="fa-solid fa-pen-to-square"></i>
-              </div>
-              <div
-                class="btn btn btn-outline-dark p-1"
-                (click)="openDeleteModule()"
-              >
-                <i class="fa-solid fa-circle-minus"></i>
-              </div>
+            <div class="h5">
+              <i class="fa-solid fa-book"></i>&nbsp; Các học phần
             </div>
           </div>
+          @if (isAdmin === true) {
+
+          <div class="col text-center">
+            <button
+              class="btn btn-outline-dark p-1 mx-1"
+              (click)="openAddModule()"
+            >
+              <i class="fa-solid fa-circle-plus"></i>
+            </button>
+            <div
+              class="btn btn btn-outline-dark p-1 mx-1"
+              (click)="openUpdateModule()"
+            >
+              <i class="fa-solid fa-pen-to-square"></i>
+            </div>
+            <div
+              class="btn btn btn-outline-dark p-1 mx-1"
+              (click)="openDeleteModule()"
+            >
+              <i class="fa-solid fa-circle-minus"></i>
+            </div>
+          </div>
+          }
         </div>
         @for (module of modules; track $index) {
         <a
@@ -97,16 +111,25 @@ import { Course } from '../model/course.model';
           class="list-group-item list-group-item-action"
           [routerLink]="['community']"
           routerLinkActive="active"
-          ><div class="h5">Thảo luận</div></a
+          ><div class="h5">
+            <i class="fa-solid fa-comments"></i>&nbsp; Thảo luận
+          </div></a
         >
+        @if (isAdmin === true) {
         <a
           class="list-group-item list-group-item-action"
           routerLink="admin"
           routerLinkActive="active"
         >
-          <div class="h5">Quản lý người dùng</div></a
+          <div class="h5">
+            <i class="fa-solid fa-sliders"></i>&nbsp; Quản lý khoá học
+          </div></a
         >
+        }
       </ul>
+      <div class="col text-center mt-5">
+        <button class="btn btn-danger">Huỷ khoá học</button>
+      </div>
     </app-sidebar>
     <app-toast></app-toast>
     <router-outlet></router-outlet>
@@ -128,6 +151,8 @@ export class CourseHomeComponent implements OnInit {
   currentModule: Module | undefined;
 
   modules: Module[];
+
+  isAdmin: boolean;
 
   addModuleModal: Modal = {
     header: 'Thêm học phần',
@@ -153,9 +178,18 @@ export class CourseHomeComponent implements OnInit {
       this.route.parent?.snapshot.paramMap.get('courseId')
     );
 
-    this.http.get<Course>(`http://localhost:8080/api/courses/${this.courseId}`).subscribe((response) => {
-      this.course = response;
-    });
+    this.http
+      .get<Member>(`http://localhost:8080/api/me/members/${this.courseId}`)
+      .subscribe((response) => {
+        this.isAdmin = response.admin;
+        console.log(response);
+      });
+
+    this.http
+      .get<Course>(`http://localhost:8080/api/courses/${this.courseId}`)
+      .subscribe((response) => {
+        this.course = response;
+      });
 
     this.addModuleModal.others = { courseId: this.courseId };
 

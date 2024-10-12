@@ -15,6 +15,7 @@ import { HttpClient } from '@angular/common/http';
         <p class="card-text" style="height: 4rem; overflow-y: auto;">
           {{ course().description }}
         </p>
+        <div class="mb-3 col-12 text-center"><i class="fa-solid fa-user"></i>&nbsp; Vai trò: <b>{{course().member === true ? (course().admin === true ? 'Quản trị viên' : 'Thành viên') : 'Chưa tham gia'}}</b></div>
         <div class="col-12 text-center">
           @if (course().member === false) {
             <a class="btn btn-outline-primary" (click)="joinCourse(course().id)">Đăng kí</a>

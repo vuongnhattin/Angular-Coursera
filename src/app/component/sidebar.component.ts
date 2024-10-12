@@ -13,7 +13,7 @@ import { Component } from '@angular/core';
       style="top: 4.5rem; overflow-y: auto; width: 300px;"
     >
       <div class="offcanvas-header">
-        <h3 class="offcanvas-title" id="offcanvasLabel">
+        <h3 class="offcanvas-title col text-center" id="offcanvasLabel" style="border: 2px solid black; border-radius: 5px">
           <ng-content select="[title]"></ng-content>
         </h3>
       </div>

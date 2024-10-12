@@ -191,7 +191,7 @@ export class CommunityComponent implements OnInit, AfterViewInit {
     });
 
     this.http.get<User>('http://localhost:8080/api/me').subscribe((res) => {
-      this.userId = res.userId;
+      this.userId = res.id;
     });
 
     this.http

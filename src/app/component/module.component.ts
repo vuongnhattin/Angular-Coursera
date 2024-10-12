@@ -14,4 +14,5 @@ import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
   styles: ``,
 })
 export class CourseMaterialComponent {
+  
 }

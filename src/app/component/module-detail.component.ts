@@ -13,6 +13,7 @@ import { DeleteModalComponent } from './modal/delete-modal.component';
 import { DeleteModalSharedService } from '../service/delete-modal-shared.service';
 import { ToastService } from '../service/toast.service';
 import { UpdateMaterialFormComponent } from './form/update-material-form.component';
+import { Member } from '../model/member.model';
 
 @Component({
   selector: 'app-module-detail',
@@ -31,11 +32,13 @@ import { UpdateMaterialFormComponent } from './form/update-material-form.compone
           <div class="col-auto">
             <div class="h4 card-header p-3 ">Tài liệu học tập</div>
           </div>
-          <div class="col text-end px-4">
-            <div class="btn btn-primary" (click)="openAddMaterial()">
-              Thêm tài liệu
+          @if (isAdmin) {
+            <div class="col text-end px-4">
+              <div class="btn btn-primary" (click)="openAddMaterial()">
+                Thêm tài liệu
+              </div>
             </div>
-          </div>
+          }
         </div>
         <div class="list-group list-group-flush">
           @for (material of materials; track $index) {
@@ -50,17 +53,30 @@ import { UpdateMaterialFormComponent } from './form/update-material-form.compone
                   {{ material.name }}
                 </a>
               </div>
-              <div class="col-1 text-end">
-                <div ngbDropdown>
-                  <div ngbDropdownToggle class="btn">
-                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                  </div>
-                  <div ngbDropdownMenu class="my-dropdown-toggle">
-                    <button ngbDropdownItem (click)="openUpdateMaterial(material.id)">Sửa</button>
-                    <button ngbDropdownItem (click)="openDeleteMaterial(material.id)">Xoá</button>
+              @if (isAdmin) {
+                <div class="col-1 text-end">
+                  <div ngbDropdown>
+                    <div ngbDropdownToggle class="btn">
+                      <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </div>
+  
+                    <div ngbDropdownMenu class="my-dropdown-toggle">
+                      <button
+                        ngbDropdownItem
+                        (click)="openUpdateMaterial(material.id)"
+                      >
+                        Sửa
+                      </button>
+                      <button
+                        ngbDropdownItem
+                        (click)="openDeleteMaterial(material.id)"
+                      >
+                        Xoá
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              }
             </div>
           </div>
           }
@@ -83,6 +99,8 @@ export class ModuleDetailComponent implements OnInit {
 
   materials: Material[];
 
+  isAdmin: boolean;
+
   createMaterialModal: Modal = {
     header: 'Thêm tài liệu',
     body: CreateMaterialFormComponent,
@@ -96,7 +114,7 @@ export class ModuleDetailComponent implements OnInit {
 
   updateMaterialModal: Modal = {
     header: 'Sửa tài liệu',
-    body: UpdateMaterialFormComponent
+    body: UpdateMaterialFormComponent,
   };
 
   ngOnInit(): void {
@@ -128,7 +146,15 @@ export class ModuleDetailComponent implements OnInit {
             window.location.reload();
           });
       }
-    })
+    });
+
+    const courseId =
+      this.route.parent?.parent?.snapshot.paramMap.get('courseId');
+    this.http
+      .get<Member>(`http://localhost:8080/api/me/members/${courseId}`)
+      .subscribe((response) => {
+        this.isAdmin = response.admin;
+      });
   }
 
   openAddMaterial() {

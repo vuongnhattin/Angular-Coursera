@@ -4,4 +4,5 @@ export interface Course {
     description: string;
     createdAt: Date;
     member: boolean;
+    admin: boolean;
 }

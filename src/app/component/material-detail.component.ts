@@ -7,6 +7,7 @@ import { AsyncPipe } from '@angular/common';
 import { SafePipe } from '../pipe/safe.pipe';
 import { BreadcrumbComponent } from './breadcrumb.component';
 import { FileResponse } from '../model/file-response.model';
+import { Member } from '../model/member.model';
 
 @Component({
   selector: 'app-material-detail',
@@ -64,8 +65,9 @@ export class MaterialDetailComponent implements OnInit {
           })
         ).subscribe(res => {
           this.fileUrl = res.fileUrl;
-          console.log(this.fileUrl);
         })
     });
+
+    
   }
 }

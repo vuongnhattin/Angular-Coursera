@@ -11,9 +11,6 @@ export class AuthService {
 
   constructor(public oauthService: OAuthService) {
     this.configure();
-    setTimeout(() => {
-      this.http.post('http://localhost:8080/api/me', {}).subscribe();
-    }, 1000);
   }
 
   private configure() {
@@ -28,5 +25,9 @@ export class AuthService {
 
   getAccessToken() {
     return this.oauthService.getAccessToken();
+  }
+
+  getUserId() {
+    return this.oauthService.getIdentityClaims()['sub'];
   }
 }

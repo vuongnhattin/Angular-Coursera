@@ -3,6 +3,9 @@ import { AuthService } from '../service/auth.service';
 import { NgbDropdown, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterLink } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
+import { HttpClient } from '@angular/common/http';
+import { User } from '../model/user.model';
+import { debounceTime, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -20,14 +23,16 @@ import { OAuthService } from 'angular-oauth2-oidc';
             height="24"
           />
         </a>
-        <div class="d-flex" ngbDropdown>
-          <button class="btn btn-link text-black" ngbDropdownToggle>{{userInfo?.name}} &nbsp; <i class="fa-solid fa-circle-user fa-xl"></i></button>
-          <div ngbDropdownMenu>
-            <button ngbDropdownItem routerLink="/profile">Thông tin</button>
-            <div class="dropdown-divider"></div>
-            <button ngbDropdownItem (click)="auth.logout()">Đăng xuất</button>
+        @if (userInfo) {
+          <div class="d-flex" ngbDropdown>
+              <button class="btn btn-link text-black" ngbDropdownToggle>{{userInfo.firstName + ' ' + userInfo.lastName}} &nbsp; <i class="fa-solid fa-circle-user fa-xl"></i></button>
+            <div ngbDropdownMenu>
+              <button ngbDropdownItem routerLink="/profile">Thông tin</button>
+              <div class="dropdown-divider"></div>
+              <button ngbDropdownItem (click)="auth.logout()">Đăng xuất</button>
+            </div>
           </div>
-        </div>
+        }
       </div>
     </nav>
   `,
@@ -35,11 +40,16 @@ import { OAuthService } from 'angular-oauth2-oidc';
 })
 export class HeaderComponent implements OnInit {
   public auth = inject(AuthService);
-  oauth = inject(OAuthService);
-  userInfo: any;
+  http = inject(HttpClient);
+  userInfo: User;
   collapsed = true;
 
   ngOnInit(): void {
-    this.userInfo = this.oauth.getIdentityClaims();
+    this.http.get<User>('http://localhost:8080/api/me').subscribe((res) => {
+      this.userInfo = res;
+    },
+    (error) => {
+      console.log(error);
+    });
   }
 }
