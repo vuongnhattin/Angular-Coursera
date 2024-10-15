@@ -59,6 +59,7 @@ import { Member } from '../model/member.model';
           class="list-group-item list-group-item-action"
           [routerLink]="['introduction']"
           routerLinkActive="active"
+          (click)="focusModule(false)"
           ><div class="h5">
             <i class="fa-solid fa-house"></i>&nbsp; Giới thiệu khoá học
           </div></a
@@ -101,6 +102,7 @@ import { Member } from '../model/member.model';
           class="list-group-item list-group-item-action text-center"
           [routerLink]="['module', module.id]"
           [routerLinkActive]="'active'"
+          (click)="focusModule(true)"
         >
           {{ module.name }}
         </a>
@@ -111,6 +113,7 @@ import { Member } from '../model/member.model';
           class="list-group-item list-group-item-action"
           [routerLink]="['community']"
           routerLinkActive="active"
+          (click)="focusModule(false)"
           ><div class="h5">
             <i class="fa-solid fa-comments"></i>&nbsp; Thảo luận
           </div></a
@@ -120,6 +123,7 @@ import { Member } from '../model/member.model';
           class="list-group-item list-group-item-action"
           routerLink="admin"
           routerLinkActive="active"
+          (click)="focusModule(false)"
         >
           <div class="h5">
             <i class="fa-solid fa-sliders"></i>&nbsp; Quản lý khoá học
@@ -154,6 +158,8 @@ export class CourseHomeComponent implements OnInit {
 
   isAdmin: boolean;
 
+  isModuleFocused: boolean = false;
+
   addModuleModal: Modal = {
     header: 'Thêm học phần',
     body: CreateModuleFormComponent,
@@ -172,6 +178,10 @@ export class CourseHomeComponent implements OnInit {
     body: 'Bạn có chắc chắn muốn xoá học phần: ',
     others: {},
   };
+
+  focusModule(state: boolean): void {
+   this.isModuleFocused = state;
+  }
 
   ngOnInit(): void {
     this.courseId = Number(
@@ -216,7 +226,7 @@ export class CourseHomeComponent implements OnInit {
     this.deleteModalSharedService.data$.subscribe((data) => {
       if (data === 'delete-module') {
         if (!this.currentModule) {
-          this.toastService.show('Bạn chưa chọn học phần');
+          this.toastService.show('Vui lòng chọn học phần');
           return;
         }
 
@@ -250,6 +260,10 @@ export class CourseHomeComponent implements OnInit {
   }
 
   openUpdateModule() {
+    if (!this.isModuleFocused) {
+      alert('Bạn chưa chọn học phần');
+      return;
+    } 
     this.updateModuleModal.others = {
       currentModule: this.currentModule,
     };
@@ -258,6 +272,10 @@ export class CourseHomeComponent implements OnInit {
   }
 
   openDeleteModule() {
+    if (!this.isModuleFocused) {
+      alert('Bạn chưa chọn học phần');
+      return;
+    } 
     const modalRef = this.modalService.open(DeleteModalComponent);
     this.deleteModuleModal.body = `Bạn có chắc chắn muốn xoá học phần: ${this.currentModule?.name} không?`;
     modalRef.componentInstance.data = this.deleteModuleModal;

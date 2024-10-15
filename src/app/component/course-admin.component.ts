@@ -25,6 +25,12 @@ import { debounceTime, map, Observable, pipe, startWith } from 'rxjs';
 import { List } from '../model/list.model';
 import { User } from '../model/user.model';
 import { AuthService } from '../service/auth.service';
+import { Member } from '../model/member.model';
+import {
+  LMarkdownEditorModule,
+  MdEditorOption,
+  UploadResult,
+} from 'ngx-markdown-editor';
 
 @Component({
   selector: 'app-course-admin',
@@ -37,6 +43,7 @@ import { AuthService } from '../service/auth.service';
     NgbHighlight,
     AsyncPipe,
     ReactiveFormsModule,
+    LMarkdownEditorModule,
   ],
   template: `
     <div class="container">
@@ -77,6 +84,18 @@ import { AuthService } from '../service/auth.service';
                   [(ngModel)]="course.description"
                 ></textarea>
               </div>
+              <div class="mb-3">
+                <label for="introduction" class="form-label"
+                  >Giới thiệu khoá học (markdown)</label
+                >
+                <textarea
+                  class="form-control"
+                  id="introduction"
+                  name="introduction"
+                  [(ngModel)]="course.introduction"
+                  style="height: 250px;"
+                ></textarea>
+              </div>
               <button type="submit" class="btn btn-outline-primary">
                 Thay đổi
               </button>
@@ -98,7 +117,7 @@ import { AuthService } from '../service/auth.service';
               <div class="mb-3 row">
                 <label
                   for="table-filtering-search"
-                  class="col-xs-3 col-sm-auto col-form-label"
+                  class="col-xs-3 col-sm-auto col-form-label fw-bold"
                   >Tìm kiếm</label
                 >
                 <div class="col-xs-3 col-sm-auto">
@@ -140,7 +159,10 @@ import { AuthService } from '../service/auth.service';
                     />
                   </td>
                   <td>
-                    <ngb-highlight [result]="user.fullName" [term]="filter.value" />
+                    <ngb-highlight
+                      [result]="user.fullName"
+                      [term]="filter.value"
+                    />
                   </td>
                   <td>
                     <ngb-highlight
@@ -150,11 +172,15 @@ import { AuthService } from '../service/auth.service';
                   </td>
                   <td>
                     @if (user.admin === true) {
-                      <button class="btn btn-outline-primary">Giáng chức</button>
+                    <button class="btn btn-link" (click)="changeRole(user.id)">
+                      Giáng chức
+                    </button>
+                    } @else {
+                    <button class="btn btn-link" (click)="changeRole(user.id)">
+                      Thăng chức
+                    </button>
                     }
-                    @else {
-                      <button class="btn btn-primary">Thăng chức</button>
-                    }
+                    <button class="btn btn-link ms-2">Xoá</button>
                   </td>
                 </tr>
                 } @empty {
@@ -203,7 +229,7 @@ export class CourseAdminComponent implements OnInit {
   ngOnInit(): void {
     this.route.parent?.parent?.params.subscribe((params) => {
       this.courseId = params['courseId'];
-      console.log('courseId: ', this.courseId);
+      this.checkAdmin();
       if (this.courseId) {
         this.http
           .get<Course>(`http://localhost:8080/api/courses/${this.courseId}`)
@@ -231,11 +257,21 @@ export class CourseAdminComponent implements OnInit {
         });
         this.users = this.users.filter((user) => {
           return user.id && user.id !== this.auth.getUserId();
-        })
+        });
         this.filterdUsers = this.users;
       });
 
     this.doSearchFilter();
+  }
+
+  checkAdmin() {
+    this.http
+      .get<Member>(`http://localhost:8080/api/me/members/${this.courseId}`)
+      .subscribe((response) => {
+        if (!response.admin) {
+          this.router.navigate(['']);
+        }
+      });
   }
 
   doSearchFilter() {
@@ -293,5 +329,18 @@ export class CourseAdminComponent implements OnInit {
   openDeleteCourse() {
     const modalRef = this.modalService.open(DeleteModalComponent);
     modalRef.componentInstance.data = this.deleteCourseModal;
+  }
+
+  changeRole(userId: string) {
+    this.http
+      .put<Member>(
+        `http://localhost:8080/api/members/role?courseId=${this.courseId}&userId=${userId}`,
+        {}
+      )
+      .subscribe((res) => {
+        console.log(res);
+        // this.router.navigate([''], {relativeTo: this.route});
+        window.location.reload();
+      });
   }
 }

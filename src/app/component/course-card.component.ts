@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
       <img src="https://placehold.co/600x400" class="card-img-top" alt="..." />
       <div class="card-body">
         <h5 class="card-title">{{ course().name }}</h5>
-        <p class="card-text" style="height: 4rem; overflow-y: auto;">
+        <p class="card-text" style="height: 4rem; overflow-y: auto; white-space: pre-line;">
           {{ course().description }}
         </p>
         <div class="mb-3 col-12 text-center"><i class="fa-solid fa-user"></i>&nbsp; Vai trò: <b>{{course().member === true ? (course().admin === true ? 'Quản trị viên' : 'Thành viên') : 'Chưa tham gia'}}</b></div>

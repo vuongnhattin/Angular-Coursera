@@ -5,4 +5,5 @@ export interface Course {
     createdAt: Date;
     member: boolean;
     admin: boolean;
+    introduction: string;
 }

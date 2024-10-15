@@ -5,7 +5,7 @@ import { RouterLink } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../model/user.model';
-import { debounceTime, Observable } from 'rxjs';
+import { catchError, debounceTime, Observable, retry } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -45,11 +45,13 @@ export class HeaderComponent implements OnInit {
   collapsed = true;
 
   ngOnInit(): void {
-    this.http.get<User>('http://localhost:8080/api/me').subscribe((res) => {
+    this.http.get<User>('http://localhost:8080/api/me')
+    .subscribe((res) => {
       this.userInfo = res;
     },
     (error) => {
       console.log(error);
+      // window.location.reload();
     });
   }
 }

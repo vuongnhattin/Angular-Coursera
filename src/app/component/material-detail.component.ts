@@ -22,22 +22,15 @@ import { Member } from '../model/member.model';
       ]"
     >
     </app-breadcrumb>
-
     @if (material && fileUrl) { @if (material.fileType === 'video') {
     <video width="800" controls>
-      <source src="{{fileUrl}}" type="video/mp4" />
+      <source src="{{ fileUrl }}" type="video/mp4" />
       Your browser does not support the video tag.
     </video>
     } @else if (material.fileType === 'pdf') {
-    <iframe
-      class="pdf"
-      [src]="fileUrl | safe"
-      width="700"
-      height="500"
-    >
+    <iframe class="pdf" [src]="fileUrl | safe" width="800" height="600">
     </iframe>
-  }
-}
+    } }
   `,
   styles: ``,
 })
@@ -63,11 +56,10 @@ export class MaterialDetailComponent implements OnInit {
               `http://localhost:8080/api/file?objectKey=${fileUrl}`
             );
           })
-        ).subscribe(res => {
+        )
+        .subscribe((res) => {
           this.fileUrl = res.fileUrl;
-        })
+        });
     });
-
-    
   }
 }

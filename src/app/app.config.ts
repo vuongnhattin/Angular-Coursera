@@ -7,6 +7,9 @@ import { OAuthModule, provideOAuthClient } from 'angular-oauth2-oidc';
 import { httpInterceptor } from './interceptor/http.interceptor';
 import { ErrorHandlerService } from './service/error-handler.service';
 import { errorInterceptor } from './interceptor/error.interceptor';
+import { BrowserModule } from '@angular/platform-browser';
+import { MarkdownModule } from 'ngx-markdown';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,5 +25,6 @@ export const appConfig: ApplicationConfig = {
     provideOAuthClient(),
     {provide: ErrorHandler, useClass: ErrorHandlerService},
     // {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+    importProvidersFrom(MarkdownModule.forRoot())
   ]
 };
