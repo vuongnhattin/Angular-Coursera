@@ -4,6 +4,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Course } from '../model/course.model';
+import {environment} from "../environment/environment";
 
 @Component({
   selector: 'app-course-introduction',
@@ -32,7 +33,7 @@ export class CourseIntroductionComponent implements OnInit {
       this.route.parent?.parent?.snapshot.paramMap.get('courseId')
     );
     this.http
-      .get<Course>(`http://localhost:8080/api/courses/${this.courseId}`)
+      .get<Course>(`${environment.apiUrl}/api/courses/${this.courseId}`)
       .subscribe((response) => {
         this.markdown = response.introduction;
       });

@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BaseFormComponent } from './base-form.component';
 import { NgFor } from '@angular/common';
+import {environment} from "../../environment/environment";
 
 @Component({
   selector: 'app-update-material-form',
@@ -60,7 +61,7 @@ export class UpdateMaterialFormComponent extends BaseFormComponent {
     // formData.append('file', this.file as Blob);
     formData.append('fileType', this.model.fileType);
 
-    this.http.put(`http://localhost:8080/api/materials/${this.materialId}`, formData).subscribe(() => {
+    this.http.put(`${environment.apiUrl}/api/materials/${this.materialId}`, formData).subscribe(() => {
       this.toastService.show('Sửa tài liệu thành công');
       window.location.reload();
     });

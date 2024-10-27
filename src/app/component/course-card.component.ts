@@ -2,6 +2,7 @@ import { Component, Inject, inject, input, Input } from '@angular/core';
 import { Course } from '../model/course.model';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environment/environment';
 
 @Component({
   selector: 'app-course-card',
@@ -39,7 +40,7 @@ export class CourseCardComponent {
   }
 
   joinCourse(id: number) {
-    this.http.post<any>('http://localhost:8080/api/me/courses', {
+    this.http.post<any>(`${environment.apiUrl}/api/me/courses`, {
       courseId: id
     }).subscribe(response => {
       window.location.reload();

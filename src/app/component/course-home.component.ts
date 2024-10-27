@@ -29,6 +29,7 @@ import { DeleteModalComponent } from './modal/delete-modal.component';
 import { ToastService } from '../service/toast.service';
 import { Course } from '../model/course.model';
 import { Member } from '../model/member.model';
+import {environment} from "../environment/environment";
 // import { UpdateModuleFormComponent } from './form/update-module-form.component';
 
 @Component({
@@ -189,14 +190,14 @@ export class CourseHomeComponent implements OnInit {
     );
 
     this.http
-      .get<Member>(`http://localhost:8080/api/me/members/${this.courseId}`)
+      .get<Member>(`${environment.apiUrl}/api/me/members/${this.courseId}`)
       .subscribe((response) => {
         this.isAdmin = response.admin;
         console.log(response);
       });
 
     this.http
-      .get<Course>(`http://localhost:8080/api/courses/${this.courseId}`)
+      .get<Course>(`${environment.apiUrl}/api/courses/${this.courseId}`)
       .subscribe((response) => {
         this.course = response;
       });
@@ -205,7 +206,7 @@ export class CourseHomeComponent implements OnInit {
 
     this.http
       .get<List<Module>>(
-        `http://localhost:8080/api/courses/${this.courseId}/modules`
+        `${environment.apiUrl}/api/courses/${this.courseId}/modules`
       )
       .subscribe((response) => {
         this.modules = response.data;
@@ -217,7 +218,7 @@ export class CourseHomeComponent implements OnInit {
       }
 
       this.http
-        .get<Module>(`http://localhost:8080/api/modules/${data}`)
+        .get<Module>(`${environment.apiUrl}/api/modules/${data}`)
         .subscribe((response) => {
           this.currentModule = response;
         });
@@ -231,7 +232,7 @@ export class CourseHomeComponent implements OnInit {
         }
 
         this.http
-          .delete(`http://localhost:8080/api/modules/${this.currentModule.id}`)
+          .delete(`${environment.apiUrl}/api/modules/${this.currentModule.id}`)
           .subscribe(
             () => {
               this.toastService.show('Xoá học phần thành công');
@@ -261,9 +262,9 @@ export class CourseHomeComponent implements OnInit {
 
   openUpdateModule() {
     if (!this.isModuleFocused) {
-      alert('Bạn chưa chọn học phần');
+      alert('Vui lòng chọn học phần');
       return;
-    } 
+    }
     this.updateModuleModal.others = {
       currentModule: this.currentModule,
     };
@@ -273,9 +274,9 @@ export class CourseHomeComponent implements OnInit {
 
   openDeleteModule() {
     if (!this.isModuleFocused) {
-      alert('Bạn chưa chọn học phần');
+      alert('Vui lòng chọn học phần');
       return;
-    } 
+    }
     const modalRef = this.modalService.open(DeleteModalComponent);
     this.deleteModuleModal.body = `Bạn có chắc chắn muốn xoá học phần: ${this.currentModule?.name} không?`;
     modalRef.componentInstance.data = this.deleteModuleModal;

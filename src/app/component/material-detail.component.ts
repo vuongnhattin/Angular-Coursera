@@ -8,6 +8,7 @@ import { SafePipe } from '../pipe/safe.pipe';
 import { BreadcrumbComponent } from './breadcrumb.component';
 import { FileResponse } from '../model/file-response.model';
 import { Member } from '../model/member.model';
+import {environment} from "../environment/environment";
 
 @Component({
   selector: 'app-material-detail',
@@ -47,13 +48,13 @@ export class MaterialDetailComponent implements OnInit {
     this.route.params.subscribe((params) => {
       const materialId = params['materialId'];
       this.http
-        .get<Material>(`http://localhost:8080/api/materials/${materialId}`)
+        .get<Material>(`${environment.apiUrl}/api/materials/${materialId}`)
         .pipe(
           switchMap((material) => {
             this.material = material;
             const fileUrl = material.fileUrl;
             return this.http.get<FileResponse>(
-              `http://localhost:8080/api/file?objectKey=${fileUrl}`
+              `${environment.apiUrl}/api/file?objectKey=${fileUrl}`
             );
           })
         )

@@ -12,6 +12,7 @@ import { List } from '../model/list.model';
 import { Material } from '../model/material.model';
 import { ModuleDetail } from '../model/module-detail.model';
 import { NgbCollapse, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import {environment} from "../environment/environment";
 
 @Component({
   selector: 'app-material',
@@ -62,7 +63,7 @@ export class MaterialComponent implements OnInit {
       const courseId = params['courseId'];
       this.http
         .get<List<ModuleDetail>>(
-          `http://localhost:8080/api/courses/${courseId}/modules-detail`
+          `${environment.apiUrl}/api/courses/${courseId}/modules-detail`
         )
         .subscribe((response) => {
           this.modules = response.data;

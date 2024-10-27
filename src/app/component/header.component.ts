@@ -6,6 +6,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../model/user.model';
 import { catchError, debounceTime, Observable, retry } from 'rxjs';
+import { environment } from '../environment/environment';
 
 @Component({
   selector: 'app-header',
@@ -45,12 +46,16 @@ export class HeaderComponent implements OnInit {
   collapsed = true;
 
   ngOnInit(): void {
-    this.http.get<User>('http://localhost:8080/api/me')
+    this.http.get<User>(`${environment.apiUrl}/api/me`)
     .subscribe((res) => {
       this.userInfo = res;
     },
     (error) => {
+      // alert(error);
       console.log(error);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 200);
       // window.location.reload();
     });
   }

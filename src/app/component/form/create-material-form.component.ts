@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormsModule, NgForm, NgModel } from '@angular/forms';
 import { BaseFormComponent } from './base-form.component';
 import { NgFor } from '@angular/common';
+import {environment} from "../../environment/environment";
 
 @Component({
   selector: 'app-create-material-form',
@@ -63,7 +64,7 @@ export class CreateMaterialFormComponent extends BaseFormComponent {
     formData.append('fileType', this.model.fileType);
     formData.append('moduleId', this.moduleId.toString());
 
-    this.http.post(`http://localhost:8080/api/materials`, formData).subscribe(() => {
+    this.http.post(`${environment.apiUrl}/api/materials`, formData).subscribe(() => {
       this.toastService.show('Thêm tài liệu mới thành công');
       window.location.reload();
     });

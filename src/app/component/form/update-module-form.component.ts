@@ -3,6 +3,7 @@ import { FormsModule, NgForm, NgModel } from '@angular/forms';
 import { BaseFormComponent } from './base-form.component';
 import { Module } from '../../model/module.model';
 import { NgFor } from '@angular/common';
+import {environment} from "../../environment/environment";
 
 @Component({
   selector: 'app-update-module-form',
@@ -51,7 +52,7 @@ export class UpdateModuleFormComponent
     console.log(this.model);
     this.http
       .put<Module>(
-        `http://localhost:8080/api/modules/${this.currentModule.id}`,
+        `${environment.apiUrl}/api/modules/${this.currentModule.id}`,
         this.model
       )
       .subscribe(

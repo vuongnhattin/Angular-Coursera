@@ -14,6 +14,7 @@ import { ToastService } from '../../service/toast.service';
 import { HttpClient } from '@angular/common/http';
 import { Course } from '../../model/course.model';
 import { BaseFormComponent } from './base-form.component';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-create-course-form',
@@ -50,7 +51,8 @@ export class CreateCourseForm extends BaseFormComponent {
   };
 
   override onSubmit(form: NgForm) {
-    this.http.post<Course>('http://localhost:8080/api/courses', this.model).subscribe(
+
+    this.http.post<Course>(`${environment.apiUrl}/api/courses`, this.model).subscribe(
       (response) => {
         form.form.reset();
         this.toastService.show('Tạo khoá học thành công');

@@ -31,6 +31,7 @@ import {
   MdEditorOption,
   UploadResult,
 } from 'ngx-markdown-editor';
+import {environment} from "../environment/environment";
 
 @Component({
   selector: 'app-course-admin',
@@ -172,11 +173,11 @@ import {
                   </td>
                   <td>
                     @if (user.admin === true) {
-                    <button class="btn btn-link" (click)="changeRole(user.id)">
+                    <button class="btn btn-link" (click)="changeRole(user.username)">
                       Giáng chức
                     </button>
                     } @else {
-                    <button class="btn btn-link" (click)="changeRole(user.id)">
+                    <button class="btn btn-link" (click)="changeRole(user.username)">
                       Thăng chức
                     </button>
                     }
@@ -232,7 +233,7 @@ export class CourseAdminComponent implements OnInit {
       this.checkAdmin();
       if (this.courseId) {
         this.http
-          .get<Course>(`http://localhost:8080/api/courses/${this.courseId}`)
+          .get<Course>(`${environment.apiUrl}/api/courses/${this.courseId}`)
           .subscribe((response) => {
             this.course = response;
           });
@@ -247,7 +248,7 @@ export class CourseAdminComponent implements OnInit {
 
     this.http
       .get<List<UserCourse>>(
-        `http://localhost:8080/api/courses/${this.courseId}/members`
+        `${environment.apiUrl}/api/courses/${this.courseId}/members`
       )
       .subscribe((res) => {
         this.users = res.data;
@@ -256,7 +257,7 @@ export class CourseAdminComponent implements OnInit {
           user.fullName = user.firstName + ' ' + user.lastName;
         });
         this.users = this.users.filter((user) => {
-          return user.id && user.id !== this.auth.getUserId();
+          return user.id && user.id !== this.auth.getUsername();
         });
         this.filterdUsers = this.users;
       });
@@ -266,7 +267,7 @@ export class CourseAdminComponent implements OnInit {
 
   checkAdmin() {
     this.http
-      .get<Member>(`http://localhost:8080/api/me/members/${this.courseId}`)
+      .get<Member>(`${environment.apiUrl}/api/me/members/${this.courseId}`)
       .subscribe((response) => {
         if (!response.admin) {
           this.router.navigate(['']);
@@ -297,7 +298,7 @@ export class CourseAdminComponent implements OnInit {
   courseSubmit(form: NgForm) {
     this.http
       .put<Course>(
-        `http://localhost:8080/api/courses/${this.courseId}`,
+        `${environment.apiUrl}/api/courses/${this.courseId}`,
         this.course
       )
       .subscribe(
@@ -314,14 +315,16 @@ export class CourseAdminComponent implements OnInit {
 
   deleteCourse() {
     this.http
-      .delete(`http://localhost:8080/api/courses/${this.courseId}`)
+      .delete(`${environment.apiUrl}/api/courses/${this.courseId}`)
       .subscribe(
         () => {
           this.toastService.show('Xoá khoá học thành công');
+          // window.location.reload();
           this.router.navigate(['']);
         },
         (error) => {
-          this.toastService.show('Xoá khoá học không thành công', 'error');
+          // this.toastService.show('Xoá khoá học không thành công', 'error');
+          console.log(error);
         }
       );
   }
@@ -331,10 +334,10 @@ export class CourseAdminComponent implements OnInit {
     modalRef.componentInstance.data = this.deleteCourseModal;
   }
 
-  changeRole(userId: string) {
+  changeRole(username: string) {
     this.http
       .put<Member>(
-        `http://localhost:8080/api/members/role?courseId=${this.courseId}&userId=${userId}`,
+        `${environment.apiUrl}/api/members/role?courseId=${this.courseId}&username=${username}`,
         {}
       )
       .subscribe((res) => {

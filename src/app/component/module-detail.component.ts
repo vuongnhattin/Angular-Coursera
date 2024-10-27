@@ -14,6 +14,7 @@ import { DeleteModalSharedService } from '../service/delete-modal-shared.service
 import { ToastService } from '../service/toast.service';
 import { UpdateMaterialFormComponent } from './form/update-material-form.component';
 import { Member } from '../model/member.model';
+import {environment} from "../environment/environment";
 
 @Component({
   selector: 'app-module-detail',
@@ -59,7 +60,7 @@ import { Member } from '../model/member.model';
                     <div ngbDropdownToggle class="btn">
                       <i class="fa-solid fa-ellipsis-vertical"></i>
                     </div>
-  
+
                     <div ngbDropdownMenu class="my-dropdown-toggle">
                       <button
                         ngbDropdownItem
@@ -127,7 +128,7 @@ export class ModuleDetailComponent implements OnInit {
 
       this.http
         .get<List<Material>>(
-          `http://localhost:8080/api/modules/${moduleId}/materials`
+          `${environment.apiUrl}/api/modules/${moduleId}/materials`
         )
         .subscribe((response) => {
           this.materials = response.data;
@@ -138,7 +139,7 @@ export class ModuleDetailComponent implements OnInit {
       if (data === 'delete-material') {
         this.http
           .delete(
-            `http://localhost:8080/api/materials/${this.currentMaterialId}`
+            `${environment.apiUrl}/api/materials/${this.currentMaterialId}`
           )
           .subscribe((response) => {
             this.toastService.show('Xoá tài liệu thành công');
@@ -151,7 +152,7 @@ export class ModuleDetailComponent implements OnInit {
     const courseId =
       this.route.parent?.parent?.snapshot.paramMap.get('courseId');
     this.http
-      .get<Member>(`http://localhost:8080/api/me/members/${courseId}`)
+      .get<Member>(`${environment.apiUrl}/api/me/members/${courseId}`)
       .subscribe((response) => {
         this.isAdmin = response.admin;
       });

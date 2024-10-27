@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastService } from '../service/toast.service';
 import { ToastContainerComponent } from './toast-container.component';
 import { BreadcrumbComponent } from './breadcrumb.component';
+import { environment } from '../environment/environment';
 
 @Component({
   selector: 'app-profile-page',
@@ -85,14 +86,14 @@ export class ProfilePageComponent implements OnInit {
   toastService = inject(ToastService);
 
   ngOnInit(): void {
-    this.http.get<User>('http://localhost:8080/api/me').subscribe((res) => {
+    this.http.get<User>(`${environment.apiUrl}/api/me`).subscribe((res) => {
       this.userInfo = res;
     });
   }
 
   submit() {
     this.http
-      .put<any>('http://localhost:8080/api/me', {
+      .put<any>(`${environment.apiUrl}/api/me`, {
         firstName: this.userInfo.firstName,
         lastName: this.userInfo.lastName,
       })

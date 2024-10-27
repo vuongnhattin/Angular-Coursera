@@ -5,6 +5,7 @@ import { catchError, retryWhen, delay, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { MessageSend } from '../model/message-send.model';
 import { MessageReceive } from '../model/message-receive.model';
+import { environment } from '../environment/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class WebSocketService {
   message$ = this.messageSource.asObservable();
 
   constructor(private auth: AuthService) {
-    this.socket = new SockJS('http://localhost:8080/ws');
+    this.socket = new SockJS(`${environment.apiUrl}/ws`);
     console.log('SockJS initialized:', this.socket);
 
     const token = this.auth.getAccessToken();

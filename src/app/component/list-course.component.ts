@@ -20,6 +20,7 @@ import { ToastService } from '../service/toast.service';
 import { ToastContainerComponent } from './toast-container.component';
 import { NgFor } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
+import { environment } from '../environment/environment';
 
 @Component({
   selector: 'app-list-course-page',
@@ -39,7 +40,7 @@ import { FormsModule, NgForm } from '@angular/forms';
           <form #searchCourseForm="ngForm" (ngSubmit)="onSearch()">
             <div class="input-group">
               <span class="input-group-text"
-                ><i class="fa-solid fa-search"></i
+              ><i class="fa-solid fa-search"></i
               ></span>
               <input
                 type="text"
@@ -68,14 +69,23 @@ import { FormsModule, NgForm } from '@angular/forms';
         </div>
       </div>
 
-      <div class="row gx-5">
+
+      <div class="row gx-5" style="height: 430px;">
+        @if (loadingCourse === true) {
+
+          <div class="col-12 text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        }
         @for (course of courses; track course.id) {
-        <div class="col-3 gy-3">
-          <app-course-card [course]="course"></app-course-card>
-        </div>
-        } @for (item of [].constructor(pageSize - courses.length); track $index)
-        {
-        <div></div>
+          <div class="col-3 gy-3">
+            <app-course-card [course]="course"></app-course-card>
+          </div>
+        }
+        @for (item of [].constructor(pageSize - courses.length); track $index) {
+          <div></div>
         }
       </div>
       <div class="col-12 d-flex justify-content-center mt-4">
@@ -95,6 +105,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 })
 export class ListCoursePageComponent implements OnInit {
   courses: Course[] = [];
+  loadingCourse = true;
 
   page = 0;
   pageSize = 0;
@@ -103,7 +114,7 @@ export class ListCoursePageComponent implements OnInit {
   order = '';
   search = '';
 
-  constructor(private http: HttpClient, private oauth: OAuthService) {}
+  constructor(private http: HttpClient, private oauth: OAuthService) { }
 
   initPageParams() {
     this.page = 1;
@@ -114,11 +125,12 @@ export class ListCoursePageComponent implements OnInit {
 
   ngOnInit() {
     this.initPageParams();
-    this.oauth.events.subscribe((event: OAuthEvent) => {
-      if (event.type === 'token_received') {
-        this.getCourses();
-      }
-    });
+    this.getCourses();
+    // this.oauth.events.subscribe((event: OAuthEvent) => {
+    //   if (event.type === 'token_received') {
+    //     this.getCourses();
+    //   }
+    // });
 
     if (this.oauth.hasValidAccessToken()) {
       this.getCourses();
@@ -126,10 +138,10 @@ export class ListCoursePageComponent implements OnInit {
   }
 
   getCourses() {
+    this.loadingCourse = true;
     this.http
       .get<Pagination<Course>>(
-        `http://localhost:8080/api/me/courses?page=${this.page - 1}&size=${
-          this.pageSize
+        `${environment.apiUrl}/api/me/courses?page=${this.page - 1}&size=${this.pageSize
         }&sortBy=${this.sortBy}&order=${this.order}&search=${this.search}`
       )
       .subscribe(response => {
@@ -137,10 +149,12 @@ export class ListCoursePageComponent implements OnInit {
         this.page = response.page + 1;
         this.pageSize = response.pageSize;
         this.totalElements = response.totalElements;
+        this.loadingCourse = false;
       });
   }
 
   pageChange() {
+    this.courses = [];
     this.getCourses();
   }
 

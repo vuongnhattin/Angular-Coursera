@@ -3,6 +3,7 @@ import { BaseFormComponent } from './base-form.component';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Module } from '../../model/module.model';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-create-module-form',
@@ -32,7 +33,7 @@ export class CreateModuleFormComponent extends BaseFormComponent implements OnIn
   @Input() courseId: number;
 
   override onSubmit(form: NgForm) {
-    this.http.post<Module>('http://localhost:8080/api/modules', this.model).subscribe(
+    this.http.post<Module>(`${environment.apiUrl}/api/modules`, this.model).subscribe(
       (response) => {
         form.form.reset();
         this.toastService.show('Tạo học phần thành công');
