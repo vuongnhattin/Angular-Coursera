@@ -13,6 +13,8 @@ import {CourseIntroductionComponent} from './component/course-introduction.compo
 import {LoginComponent} from "./component/login.component";
 import {AuthGuard} from "./guard/auth.guard";
 import {RegisterComponent} from "./component/register.component";
+import { PaymentReviewComponent } from './component/payment-review.component';
+import { PaymentCancelComponent } from './component/payment-cancel.component';
 
 export const routes: Routes = [
   // {path: 'courses', component: ListCoursePageComponent},
@@ -20,6 +22,8 @@ export const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: '', component: ListCoursePageComponent, pathMatch: 'full', canActivate: [AuthGuard]},
   {path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuard]},
+  {path: 'payment/review', component: PaymentReviewComponent, canActivate: [AuthGuard]},
+  {path: 'payment/cancel', component: PaymentCancelComponent, canActivate: [AuthGuard]},
   {
     path: 'course/:courseId',
     component: CoursePageComponent, canActivate: [AuthGuard],

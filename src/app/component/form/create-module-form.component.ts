@@ -3,7 +3,7 @@ import { BaseFormComponent } from './base-form.component';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Module } from '../../model/module.model';
 import { ActivatedRoute } from '@angular/router';
-import { environment } from '../../environment/environment';
+import { environment } from '../../../environment/environment';
 
 @Component({
   selector: 'app-create-module-form',

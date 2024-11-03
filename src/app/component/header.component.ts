@@ -6,7 +6,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../model/user.model';
 import { catchError, debounceTime, Observable, retry } from 'rxjs';
-import { environment } from '../environment/environment';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-header',

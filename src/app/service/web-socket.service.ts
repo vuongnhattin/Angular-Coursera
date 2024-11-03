@@ -5,7 +5,7 @@ import { catchError, retryWhen, delay, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { MessageSend } from '../model/message-send.model';
 import { MessageReceive } from '../model/message-receive.model';
-import { environment } from '../environment/environment';
+import { environment } from '../../environment/environment';
 
 @Injectable({
   providedIn: 'root'

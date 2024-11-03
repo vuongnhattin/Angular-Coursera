@@ -4,7 +4,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Course } from '../model/course.model';
-import {environment} from "../environment/environment";
+import {environment} from "../../environment/environment";
 
 @Component({
   selector: 'app-course-introduction',

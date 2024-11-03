@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastService } from '../service/toast.service';
 import { ToastContainerComponent } from './toast-container.component';
 import { BreadcrumbComponent } from './breadcrumb.component';
-import { environment } from '../environment/environment';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-profile-page',

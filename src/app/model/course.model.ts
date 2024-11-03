@@ -6,4 +6,5 @@ export interface Course {
     member: boolean;
     admin: boolean;
     introduction: string;
+    price: number;
 }

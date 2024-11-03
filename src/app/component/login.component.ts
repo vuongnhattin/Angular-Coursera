@@ -6,7 +6,7 @@ import {LoginResponse} from "../model/login-response.model";
 import {AuthService} from "../service/auth.service";
 import {Router, RouterLink} from "@angular/router";
 import {routes} from "../app.routes";
-import {environment} from "../environment/environment";
+import {environment} from "../../environment/environment";
 
 @Component({
   selector: 'app-login',
@@ -118,7 +118,7 @@ import {environment} from "../environment/environment";
         <!--            Remember me-->
         <!--          </label>-->
         <!--        </div>-->
-        <button class="btn btn-primary w-100 py-2" type="submit">Đăng nhập</button>
+        <button class="btn btn-primary w-100 py-2" [disabled]="loading" type="submit">Đăng nhập</button>
         <!--        <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2024</p>-->
       </form>
     </main>
@@ -239,6 +239,8 @@ export class LoginComponent implements OnInit{
   router = inject(Router);
   error = '  '
 
+  loading = false; 
+
   model: LoginRequest = {
     username: '',
     password: ''
@@ -251,6 +253,7 @@ export class LoginComponent implements OnInit{
   }
 
   onSubmit() {
+    this.loading = true;
     this.http.post<LoginResponse>(`${environment.apiUrl}/auth/login`, this.model, {
       headers: new HttpHeaders({
         'skipAuth': 'true'
@@ -264,7 +267,8 @@ export class LoginComponent implements OnInit{
       error => {
         console.log(error.error.message);
         this.error = error.error.message;
-      }
+        this.loading = false;
+      },
     )
   }
 }

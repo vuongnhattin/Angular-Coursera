@@ -1,8 +1,9 @@
-import { Component, Inject, inject, input, Input } from '@angular/core';
+import {Component, EventEmitter, Inject, inject, input, Input, Output} from '@angular/core';
 import { Course } from '../model/course.model';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../environment/environment';
+import { environment } from '../../environment/environment';
+import {async} from "rxjs";
 
 @Component({
   selector: 'app-course-card',
@@ -19,7 +20,7 @@ import { environment } from '../environment/environment';
         <div class="mb-3 col-12 text-center"><i class="fa-solid fa-user"></i>&nbsp; Vai trò: <b>{{course().member === true ? (course().admin === true ? 'Quản trị viên' : 'Thành viên') : 'Chưa tham gia'}}</b></div>
         <div class="col-12 text-center">
           @if (course().member === false) {
-            <a class="btn btn-outline-primary" (click)="joinCourse(course().id)">Đăng kí</a>
+            <a class="btn btn-outline-primary" (click)="joinCourse(course().id)">$ {{course().price}}</a>
           }
           @else {
             <a class="btn btn-primary" (click)="goToCourse()">Truy cập</a>
@@ -35,15 +36,16 @@ export class CourseCardComponent {
   router = inject(Router);
   http = inject(HttpClient);
 
+  @Output() loadingPayment = new EventEmitter<boolean>();
+
   goToCourse() {
     this.router.navigate(['/course', this.course().id]);
   }
 
-  joinCourse(id: number) {
-    this.http.post<any>(`${environment.apiUrl}/api/me/courses`, {
-      courseId: id
-    }).subscribe(response => {
-      window.location.reload();
-    })
+  async joinCourse(courseId: number) {
+    this.loadingPayment.emit(true);
+    const paymentResponse : any = await this.http.post(`${environment.apiUrl}/api/paypal/create-order?courseId=${courseId}`, {}).toPromise();
+    window.location.href = paymentResponse['redirectUrl'];
+    // this.loadingPayment.emit(false);
   }
 }

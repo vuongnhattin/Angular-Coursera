@@ -3,7 +3,7 @@ import { FormsModule, NgForm, NgModel } from '@angular/forms';
 import { BaseFormComponent } from './base-form.component';
 import { Module } from '../../model/module.model';
 import { NgFor } from '@angular/common';
-import {environment} from "../../environment/environment";
+import {environment} from "../../../environment/environment";
 
 @Component({
   selector: 'app-update-module-form',

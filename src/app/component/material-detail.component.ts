@@ -8,7 +8,7 @@ import { SafePipe } from '../pipe/safe.pipe';
 import { BreadcrumbComponent } from './breadcrumb.component';
 import { FileResponse } from '../model/file-response.model';
 import { Member } from '../model/member.model';
-import {environment} from "../environment/environment";
+import {environment} from "../../environment/environment";
 
 @Component({
   selector: 'app-material-detail',

@@ -14,7 +14,7 @@ import { ToastService } from '../../service/toast.service';
 import { HttpClient } from '@angular/common/http';
 import { Course } from '../../model/course.model';
 import { BaseFormComponent } from './base-form.component';
-import { environment } from '../../environment/environment';
+import { environment } from '../../../environment/environment';
 
 @Component({
   selector: 'app-create-course-form',

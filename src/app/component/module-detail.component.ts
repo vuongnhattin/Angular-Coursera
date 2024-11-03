@@ -14,7 +14,7 @@ import { DeleteModalSharedService } from '../service/delete-modal-shared.service
 import { ToastService } from '../service/toast.service';
 import { UpdateMaterialFormComponent } from './form/update-material-form.component';
 import { Member } from '../model/member.model';
-import {environment} from "../environment/environment";
+import {environment} from "../../environment/environment";
 
 @Component({
   selector: 'app-module-detail',

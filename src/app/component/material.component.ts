@@ -12,7 +12,7 @@ import { List } from '../model/list.model';
 import { Material } from '../model/material.model';
 import { ModuleDetail } from '../model/module-detail.model';
 import { NgbCollapse, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
-import {environment} from "../environment/environment";
+import {environment} from "../../environment/environment";
 
 @Component({
   selector: 'app-material',

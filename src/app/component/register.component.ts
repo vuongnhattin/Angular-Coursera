@@ -7,7 +7,7 @@ import {AuthService} from "../service/auth.service";
 import {LoginRequest} from "../model/login-request.model";
 import {LoginResponse} from "../model/login-response.model";
 import {RegisterRequest} from "../model/register-request.mode";
-import { environment } from '../environment/environment';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-login',
@@ -147,7 +147,7 @@ import { environment } from '../environment/environment';
         <!--            Remember me-->
         <!--          </label>-->
         <!--        </div>-->
-        <button class="btn btn-primary w-100 py-2 mt-3" type="submit">Đăng kí</button>
+        <button class="btn btn-primary w-100 py-2 mt-3" [disabled]="loading" type="submit">Đăng kí</button>
         <!--        <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2024</p>-->
       </form>
     </main>
@@ -268,6 +268,8 @@ export class RegisterComponent implements OnInit{
   router = inject(Router);
   error = '  '
 
+  loading = false;
+
   model: RegisterRequest = {
     username: '',
     password: '',
@@ -284,8 +286,10 @@ export class RegisterComponent implements OnInit{
   }
 
   onSubmit() {
+    this.loading = true;
     if (this.model.password !== this.model.repassword) {
       this.error = "Mật khẩu không khớp"
+      this.loading = false;
       return;
     }
     console.log(this.model)
@@ -301,6 +305,7 @@ export class RegisterComponent implements OnInit{
         this.router.navigate(['/login']);
       },
       error => {
+        this.loading = false;
         console.log(error.error.message);
         for (let obj in error.error) {
           this.error = error.error[obj];

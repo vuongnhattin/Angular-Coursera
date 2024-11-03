@@ -18,9 +18,9 @@ import { Modal } from '../model/modal.model';
 import { CreateCourseForm } from './form/create-course-form.component';
 import { ToastService } from '../service/toast.service';
 import { ToastContainerComponent } from './toast-container.component';
-import { NgFor } from '@angular/common';
+import {NgFor, NgIf} from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
-import { environment } from '../environment/environment';
+import { environment } from '../../environment/environment';
 
 @Component({
   selector: 'app-list-course-page',
@@ -31,6 +31,7 @@ import { environment } from '../environment/environment';
     NgbPaginationModule,
     NgFor,
     FormsModule,
+    NgIf
   ],
   template: `
     <div class="col text-center h2 mb-4">Danh sách khoá học</div>
@@ -81,7 +82,7 @@ import { environment } from '../environment/environment';
         }
         @for (course of courses; track course.id) {
           <div class="col-3 gy-3">
-            <app-course-card [course]="course"></app-course-card>
+            <app-course-card [course]="course" (loadingPayment)="onLoadingPayment($event)"></app-course-card>
           </div>
         }
         @for (item of [].constructor(pageSize - courses.length); track $index) {
@@ -99,9 +100,41 @@ import { environment } from '../environment/environment';
         />
       </div>
     </div>
+    <div class="overlay" *ngIf="loadingPayment">
+      <div class="spinner"></div>
+    </div>
     <app-toast></app-toast>
   `,
-  styles: ``,
+  styles: `
+    /* parent.component.css */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000; /* Ensure it appears above all other content */
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #0066cc;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Spinner animation */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  `,
 })
 export class ListCoursePageComponent implements OnInit {
   courses: Course[] = [];
@@ -113,6 +146,8 @@ export class ListCoursePageComponent implements OnInit {
   sortBy = '';
   order = '';
   search = '';
+
+  loadingPayment = false;
 
   constructor(private http: HttpClient, private oauth: OAuthService) { }
 
@@ -173,5 +208,9 @@ export class ListCoursePageComponent implements OnInit {
   onSearch() {
     this.initPageParams();
     this.getCourses();
+  }
+
+  onLoadingPayment(loading: boolean) {
+    this.loadingPayment = loading;
   }
 }

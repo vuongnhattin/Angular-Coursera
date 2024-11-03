@@ -29,7 +29,7 @@ import { DeleteModalComponent } from './modal/delete-modal.component';
 import { ToastService } from '../service/toast.service';
 import { Course } from '../model/course.model';
 import { Member } from '../model/member.model';
-import {environment} from "../environment/environment";
+import {environment} from "../../environment/environment";
 // import { UpdateModuleFormComponent } from './form/update-module-form.component';
 
 @Component({
@@ -132,9 +132,9 @@ import {environment} from "../environment/environment";
         >
         }
       </ul>
-      <div class="col text-center mt-5">
-        <button class="btn btn-danger">Huỷ khoá học</button>
-      </div>
+<!--      <div class="col text-center mt-5">-->
+<!--        <button class="btn btn-danger">Huỷ khoá học</button>-->
+<!--      </div>-->
     </app-sidebar>
     <app-toast></app-toast>
     <router-outlet></router-outlet>

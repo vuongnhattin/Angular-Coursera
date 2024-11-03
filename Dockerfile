@@ -11,12 +11,13 @@ RUN npm install -g @angular/cli
 
 COPY . .
 
-RUN ng --version  # Optional: Check Angular CLI version
-RUN ng build --configuration=production
+RUN npm install
+RUN ng build
 
 # Stage 2: Serve with NGINX
 FROM nginx:latest
 
-COPY --from=build /app/dist/angular-coursera /usr/share/nginx/html
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build /app/dist/angular-coursera/browser /usr/share/nginx/html
 
 EXPOSE 80

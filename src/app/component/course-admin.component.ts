@@ -31,7 +31,7 @@ import {
   MdEditorOption,
   UploadResult,
 } from 'ngx-markdown-editor';
-import {environment} from "../environment/environment";
+import {environment} from "../../environment/environment";
 
 @Component({
   selector: 'app-course-admin',
@@ -132,7 +132,7 @@ import {environment} from "../environment/environment";
               </div>
             </form>
 
-            <table class="table table-striped">
+            <table class="table text-center table-bordered">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -173,15 +173,15 @@ import {environment} from "../environment/environment";
                   </td>
                   <td>
                     @if (user.admin === true) {
-                    <button class="btn btn-link" (click)="changeRole(user.username)">
+                    <a class="btn btn-link" (click)="changeRole(user.username)">
                       Giáng chức
-                    </button>
+                    </a>
                     } @else {
-                    <button class="btn btn-link" (click)="changeRole(user.username)">
+                    <a class="btn btn-link" (click)="changeRole(user.username)">
                       Thăng chức
-                    </button>
+                    </a>
                     }
-                    <button class="btn btn-link ms-2">Xoá</button>
+                    <a class="btn btn-link ms-2" (click)="deleteMember(user.username)">Xoá</a>
                   </td>
                 </tr>
                 } @empty {
@@ -202,7 +202,9 @@ import {environment} from "../environment/environment";
       <app-toast></app-toast>
     </div>
   `,
-  styles: ``,
+  styles: `
+
+  `,
 })
 export class CourseAdminComponent implements OnInit {
   active = 1;
@@ -345,5 +347,11 @@ export class CourseAdminComponent implements OnInit {
         // this.router.navigate([''], {relativeTo: this.route});
         window.location.reload();
       });
+  }
+
+  deleteMember(username: string) {
+    this.http.delete(`${environment.apiUrl}/api/members?courseId=${this.courseId}&username=${username}`).subscribe((res) => {
+      window.location.reload();
+    });
   }
 }

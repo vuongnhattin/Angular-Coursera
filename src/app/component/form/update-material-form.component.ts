@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { BaseFormComponent } from './base-form.component';
 import { NgFor } from '@angular/common';
-import {environment} from "../../environment/environment";
+import {environment} from "../../../environment/environment";
 
 @Component({
   selector: 'app-update-material-form',

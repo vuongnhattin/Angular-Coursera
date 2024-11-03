@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../model/user.model';
-import {environment} from "../environment/environment";
+import {environment} from "../../environment/environment";
 
 @Component({
   selector: 'app-community',
