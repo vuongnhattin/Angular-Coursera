@@ -86,6 +86,15 @@ import {environment} from "../../environment/environment";
                 ></textarea>
               </div>
               <div class="mb-3">
+                <label for="price" class="form-label">Giá khoá học ($)</label>
+                <input
+                  class="form-control"
+                  id="price"
+                  name="price"
+                  [(ngModel)]="course.price"
+                />
+              </div>
+              <div class="mb-3">
                 <label for="introduction" class="form-label"
                   >Giới thiệu khoá học (markdown)</label
                 >
@@ -94,7 +103,7 @@ import {environment} from "../../environment/environment";
                   id="introduction"
                   name="introduction"
                   [(ngModel)]="course.introduction"
-                  style="height: 250px;"
+                  style="height: 150px;"
                 ></textarea>
               </div>
               <button type="submit" class="btn btn-outline-primary">

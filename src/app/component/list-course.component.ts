@@ -21,6 +21,9 @@ import { ToastContainerComponent } from './toast-container.component';
 import {NgFor, NgIf} from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { environment } from '../../environment/environment';
+import { BaseModalComponent } from './modal/base-modal.component';
+import { InfoModalComponent } from './modal/info-modal.component';
+import { PaypalHelperComponent } from './paypal-helper.component';
 
 @Component({
   selector: 'app-list-course-page',
@@ -66,6 +69,12 @@ import { environment } from '../../environment/environment';
         <div class="col-auto">
           <button class="btn btn-link" (click)="getCourses()">
             <i class="fa-solid fa-rotate-right"></i> Refresh
+          </button>
+        </div>
+
+        <div class="col-auto">
+          <button class="btn btn-link" (click)="helpPaypal()">
+          <i class="fa-solid fa-clipboard-question"></i> Hướng dẫn đăng nhập Paypal
           </button>
         </div>
       </div>
@@ -212,5 +221,14 @@ export class ListCoursePageComponent implements OnInit {
 
   onLoadingPayment(loading: boolean) {
     this.loadingPayment = loading;
+  }
+
+  helpPaypal() {
+    // alert('email: sb-e7vlz33462258@personal.example.com\rpassword: sPB>8&1x')
+    const modalRef = this.modalService.open(InfoModalComponent);
+    modalRef.componentInstance.data = {
+      header: 'Hướng dẫn đăng nhập Paypal',
+      body: PaypalHelperComponent
+    }
   }
 }

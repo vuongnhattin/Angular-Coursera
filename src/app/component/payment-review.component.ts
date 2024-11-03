@@ -19,9 +19,11 @@ import {NgIf} from "@angular/common";
             <div class="spinner-grow text-primary mb-3" role="status">
             </div>
           }
+          @if (!loading) {
+            <a class="btn btn-primary" href="">Quay về trang chủ</a>
+          }
         </div>
 
-        <a class="btn btn-primary" href="">Quay về trang chủ</a>
       </div>
     </div>
   `,

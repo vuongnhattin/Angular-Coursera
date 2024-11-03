@@ -40,6 +40,15 @@ import { environment } from '../../../environment/environment';
           [(ngModel)]="model.description"
         />
       </div>
+      <div class="mb-3">
+        <label for="price" class="form-label">Giá khoá học ($)</label>
+        <input
+          class="form-control"
+          id="price"
+          name="price"
+          [(ngModel)]="model.price"
+        />
+      </div>
     </form>
   `,
   styles: ``,
@@ -48,6 +57,7 @@ export class CreateCourseForm extends BaseFormComponent {
   override model = {
     name: '',
     description: '',
+    price: 1
   };
 
   override onSubmit(form: NgForm) {
